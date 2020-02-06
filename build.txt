@@ -1,0 +1,3 @@
+displayName = Ilwyd's Mod
+author = Ilwyd
+version = 0.1
