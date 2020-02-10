@@ -147,6 +147,9 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 
 		public override void AI() {
 			Player player = Main.player[projectile.owner];
+			Vector2 playerPos = player.Center;
+			float locX = projectile.position.X;
+			float locY = projectile.position.Y;
 
 			#region Active check
 			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
@@ -159,9 +162,13 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			#endregion
 
 			#region General behavior
-			projectile.position = Main.MouseWorld;
+			Console.WriteLine(locX + ", " + locY + "\n"+
+								playerPos.X + ", " + playerPos.Y + "\n" +
+								(playerPos.X - locX) + ", " + (playerPos.Y - locY) +
+								"\n----------------------");
+			LockDistance(playerPos, projectile, 200);
 
-			ProjectileReflect(projectile);
+			ProjectileIntersect(projectile);
 			#endregion
 
 			#region Animation and visuals
@@ -174,22 +181,55 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 		}
 
 		/*
-			This method reflects other, hostile, projectiles.
+			This method determines if other, hostile, projectiles are 
+			intersecting with the minion.
 		
 			minion: The minion projectile
 		*/
-		public void ProjectileReflect(Projectile minion) {
+		public void ProjectileIntersect(Projectile minion) {
 			//Loop through each projectile in the world
 			foreach(Projectile proj in Main.projectile) {
 				//If the projectile is hostile and its hitbox intersects with the minion
 				if(proj.Hitbox.Intersects(minion.Hitbox) && proj.hostile) {
-					//Make the projectile non-hostile and friendly
-					proj.hostile = false;
-					proj.friendly = true;
-
-					//Reversing the projectile's velocity
-					proj.velocity = proj.velocity.RotatedBy(Math.PI);
+					ProjectileReflect(proj);
 				}
+			}
+		}
+
+		/*
+			This method reverses a projectile's velocity.
+		*/
+		public void ProjectileReflect(Projectile proj) {
+			//Make the projectile non-hostile and friendly
+			proj.hostile = false;
+			proj.friendly = true;
+
+			//Reversing the projectile's velocity
+			proj.velocity = proj.velocity.RotatedBy(Math.PI);
+		}
+
+		public void LockDistance(Vector2 playerPos, Projectile proj, float maxDistance) {
+			float distanceX = playerPos.X - proj.Center.X;
+			float distanceY = playerPos.Y - proj.Center.Y;
+			
+			if(distanceX > maxDistance) {
+				proj.position.X = playerPos.X + maxDistance;
+			}
+			else if(distanceX < -maxDistance) {
+				proj.position.X = playerPos.X - maxDistance;
+			}
+			else {
+				proj.position.X = Main.MouseWorld.X;
+			}
+
+			if(distanceY > maxDistance) {
+				proj.position.Y = playerPos.Y + maxDistance;
+			}
+			else if(distanceY < -maxDistance) {
+				proj.position.Y = playerPos.Y - maxDistance;
+			}
+			else {
+				proj.position.Y = Main.MouseWorld.Y;
 			}
 		}
 	}
