@@ -112,8 +112,8 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 		}
 
 		public sealed override void SetDefaults() {
-			projectile.width = 40;
-			projectile.height = 40;
+			projectile.width = 34;
+			projectile.height = 18;
 			// Makes the minion go through tiles freely
 			projectile.tileCollide = true;
 
@@ -162,10 +162,6 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			#endregion
 
 			#region General behavior
-			Console.WriteLine(locX + ", " + locY + "\n"+
-								playerPos.X + ", " + playerPos.Y + "\n" +
-								(playerPos.X - locX) + ", " + (playerPos.Y - locY) +
-								"\n----------------------");
 			LockDistance(playerPos, projectile, 200);
 
 			ProjectileIntersect(projectile);
@@ -174,7 +170,7 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			#region Animation and visuals
 			
 			projectile.rotation = (float)-Math.Atan2(projectile.position.X - playerPos.X, projectile.position.Y - playerPos.Y);
-
+			
 			// Some visuals here
 			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.78f);
 			#endregion
@@ -229,6 +225,9 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			}
 			//Else lock the minion's position to the edge of the bounds
 			else {
+				//Get a single unit distance between mouse and playerPos (normalize)
+				//Multiply it by max distance to get a vector of that distance away
+				//Add playerPos to that vector
 				proj.position = playerPos + (Vector2.Normalize(Main.MouseWorld - playerPos) * maxDistance);
 			}
 		}
