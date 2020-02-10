@@ -172,8 +172,8 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			#endregion
 
 			#region Animation and visuals
-			// So it will lean slightly towards the direction it's moving
-			projectile.rotation = projectile.velocity.X * 0.05f;
+			
+			projectile.rotation = (float)-Math.Atan2(projectile.position.X - playerPos.X, projectile.position.Y - playerPos.Y);
 
 			// Some visuals here
 			Lighting.AddLight(projectile.Center, Color.White.ToVector3() * 0.78f);
