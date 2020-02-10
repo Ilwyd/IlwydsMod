@@ -208,28 +208,28 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			proj.velocity = proj.velocity.RotatedBy(Math.PI);
 		}
 
-		public void LockDistance(Vector2 playerPos, Projectile proj, float maxDistance) {
-			float distanceX = playerPos.X - proj.Center.X;
-			float distanceY = playerPos.Y - proj.Center.Y;
-			
-			if(distanceX > maxDistance) {
-				proj.position.X = playerPos.X + maxDistance;
-			}
-			else if(distanceX < -maxDistance) {
-				proj.position.X = playerPos.X - maxDistance;
-			}
-			else {
-				proj.position.X = Main.MouseWorld.X;
-			}
+		/*
+			This method locks the distance the minion has from the player
+			at a max of maxDistance.
 
-			if(distanceY > maxDistance) {
-				proj.position.Y = playerPos.Y + maxDistance;
+			playerPos: Vector2 of the player's position
+			proj: The minion projectile
+			maxDistance: The max distance the minion can be from the character
+		*/
+		public void LockDistance(Vector2 playerPos, Projectile proj, float maxDistance) {
+			//Find the distance between the player and the mouse
+			float distance = Vector2.Distance(playerPos, Main.MouseWorld);
+			float projDistance = maxDistance + 1;
+
+			//If the distance is within the bounds
+			//Max the minion's position equal to the mouse and return
+			if(!(distance > maxDistance)) {
+				proj.position = Main.MouseWorld;
+				return;
 			}
-			else if(distanceY < -maxDistance) {
-				proj.position.Y = playerPos.Y - maxDistance;
-			}
+			//Else lock the minion's position to the edge of the bounds
 			else {
-				proj.position.Y = Main.MouseWorld.Y;
+				proj.position = playerPos + (Vector2.Normalize(Main.MouseWorld - playerPos) * maxDistance);
 			}
 		}
 	}
