@@ -183,10 +183,12 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			foreach(Projectile proj in Main.projectile) {
 				//If the projectile is hostile and its hitbox intersects with the minion
 				if(proj.Hitbox.Intersects(minion.Hitbox) && proj.hostile) {
-					//Reflect the projectile
+					//Make the projectile non-hostile and friendly
 					proj.hostile = false;
+					proj.friendly = true;
+
 					//Reversing the projectile's velocity
-					proj.velocity = new Vector2(proj.velocity.Y, proj.velocity.X);
+					proj.velocity = proj.velocity.RotatedBy(Math.PI);
 				}
 			}
 		}
