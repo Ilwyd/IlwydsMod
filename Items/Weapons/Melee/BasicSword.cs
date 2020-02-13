@@ -1,7 +1,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace IlwydsMod.Items.Weapons
+namespace IlwydsMod.Items.Weapons.Melee
 {
 	public class BasicSword : ModItem
 	{
