@@ -89,12 +89,6 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 		}
 	}
 
-	/*
-	 * This minion shows a few mandatory things that make it behave properly. 
-	 * Its attack pattern is simple: If an enemy is in range of 43 tiles, it will fly to it and deal contact damage
-	 * If the player targets a certain NPC with right-click, it will fly through tiles to it
-	 * If it isn't attacking, it will float near the player with minimal movement
-	 */
 	public class ExampleMinion : ModProjectile
 	{
 		public override void SetStaticDefaults() {
@@ -115,7 +109,7 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			projectile.width = 34;
 			projectile.height = 18;
 			// Makes the minion go through tiles freely
-			projectile.tileCollide = true;
+			projectile.tileCollide = false;
 
 			// These below are needed for a minion weapon
 			// Only controls if it deals damage to enemies on contact (more on that later)
@@ -128,16 +122,12 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 			projectile.penetrate = -1;
 		}
 
-		//public override NewInstance(Projectile projectileClone) {
-
-		//}
-
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
 			return true;
 		}
 
 		public override bool CanDamage() {
-			return true;
+			return false;
 		}
 
 		// Here you can decide if your minion breaks things like grass or pots
@@ -193,15 +183,20 @@ namespace IlwydsMod.Projectiles.Minions.ExampleSimpleMinion
 		}
 
 		/*
-			This method reverses a projectile's velocity.
+			This method reverses a projectile's velocity and makes it friendly.
 		*/
 		public void ProjectileReflect(Projectile proj) {
 			//Make the projectile non-hostile and friendly
 			proj.hostile = false;
 			proj.friendly = true;
 
+			Projectile proj1 = proj;
+			Projectile proj2 = proj;
+
 			//Reversing the projectile's velocity
 			proj.velocity = proj.velocity.RotatedBy(Math.PI);
+			proj1.velocity = proj1.velocity.RotatedBy(Math.PI/2);
+			proj2.velocity = proj2.velocity.RotatedBy(Math.PI + Math.PI/2);
 		}
 
 		/*
